@@ -80,7 +80,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   TextField(
                     controller: _textEditingController,
                     decoration: InputDecoration(
-                      labelText: 'Enter your name',
+                      labelText: "What's your nickname?",
                     ),
                     onSubmitted: (_) {
                       _joinChat();

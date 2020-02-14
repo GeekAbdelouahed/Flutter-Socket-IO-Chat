@@ -1,10 +1,20 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class MessageForm extends StatefulWidget {
   final Function(String) onSendMessage;
 
-  const MessageForm({this.onSendMessage});
+  final Function onTyping;
+
+  final Function onStopTyping;
+
+  const MessageForm({
+    @required this.onSendMessage,
+    @required this.onTyping,
+    @required this.onStopTyping,
+  });
 
   @override
   _MessageFormState createState() => _MessageFormState();
@@ -13,6 +23,10 @@ class MessageForm extends StatefulWidget {
 class _MessageFormState extends State<MessageForm> {
   TextEditingController _textEditingController;
 
+  Timer _typingTimer;
+
+  bool _isTyping = false;
+
   void _sendMessage() {
     if (_textEditingController.text.isEmpty) return;
 
@@ -20,6 +34,17 @@ class _MessageFormState extends State<MessageForm> {
     setState(() {
       _textEditingController.text = "";
     });
+  }
+
+  void _runTimer() {
+    if (_typingTimer != null && _typingTimer.isActive) _typingTimer.cancel();
+    _typingTimer = Timer(Duration(milliseconds: 500), () {
+      if (!_isTyping) return;
+      _isTyping = false;
+      widget.onStopTyping();
+    });
+    _isTyping = true;
+    widget.onTyping();
   }
 
   @override
@@ -50,6 +75,9 @@ class _MessageFormState extends State<MessageForm> {
                   color: Colors.white,
                 ),
                 child: TextField(
+                  onChanged: (_) {
+                    _runTimer();
+                  },
                   onSubmitted: (_) {
                     _sendMessage();
                   },

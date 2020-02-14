@@ -16,7 +16,7 @@ class SocketIoManager {
   }
 
   void subscribe(String channel, Function(Map<String, dynamic>) onGetData) {
-    _socketIO.subscribe('receive_message', (jsonData) {
+    _socketIO.subscribe(channel, (jsonData) {
       Map<String, dynamic> data = json.decode(jsonData);
       onGetData(data);
     });

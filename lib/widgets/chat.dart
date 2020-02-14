@@ -24,6 +24,9 @@ class _ChatScreenState extends State<ChatScreen> {
 
   SocketIoManager _socketIoManager;
 
+  bool _isTyping = false;
+  String _userNameTyping;
+
   void _sendMessage(String messageContent) {
     _socketIoManager.sendMessage(
       'send_message',
@@ -58,6 +61,19 @@ class _ChatScreenState extends State<ChatScreen> {
       );
     });
 
+    _socketIoManager.subscribe('typing', (Map<String, dynamic> data) {
+      _userNameTyping = data['senderName'];
+      setState(() {
+        _isTyping = true;
+      });
+    });
+
+    _socketIoManager.subscribe('stop_typing', (Map<String, dynamic> data) {
+      setState(() {
+        _isTyping = false;
+      });
+    });
+
     _socketIoManager.connect();
   }
 
@@ -76,6 +92,7 @@ class _ChatScreenState extends State<ChatScreen> {
       ),
       backgroundColor: Colors.white,
       body: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           Expanded(
             child: Consumer<MessagesProvider>(
@@ -91,7 +108,31 @@ class _ChatScreenState extends State<ChatScreen> {
               ),
             ),
           ),
-          MessageForm(onSendMessage: _sendMessage),
+          Visibility(
+            visible: _isTyping,
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Text(
+                '$_userNameTyping is typing...',
+                style: Theme.of(context).textTheme.title.copyWith(
+                      color: Colors.black54,
+                      fontWeight: FontWeight.w400,
+                      fontSize: 18,
+                    ),
+              ),
+            ),
+          ),
+          MessageForm(
+            onSendMessage: _sendMessage,
+            onTyping: () {
+              _socketIoManager.sendMessage(
+                  'typing', json.encode({'senderName': widget.senderName}));
+            },
+            onStopTyping: () {
+              _socketIoManager.sendMessage('stop_typing',
+                  json.encode({'senderName': widget.senderName}));
+            },
+          ),
         ],
       ),
     );
