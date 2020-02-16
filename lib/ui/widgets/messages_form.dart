@@ -38,7 +38,7 @@ class _MessageFormState extends State<MessageForm> {
 
   void _runTimer() {
     if (_typingTimer != null && _typingTimer.isActive) _typingTimer.cancel();
-    _typingTimer = Timer(Duration(milliseconds: 500), () {
+    _typingTimer = Timer(Duration(milliseconds: 600), () {
       if (!_isTyping) return;
       _isTyping = false;
       widget.onStopTyping();

@@ -1,14 +1,15 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 
-import '../providers/messages_provider.dart';
-import '../widgets/chat_item.dart';
-import '../models/message.dart';
-import '../constants.dart';
-import '../socket_io_manager.dart';
-import '../widgets/message_form.dart';
+import '../../providers/messages_provider.dart';
+import '../../models/message.dart';
+import '../../constants.dart';
+import '../../socket_io_manager.dart';
+import '../widgets/messages_item.dart';
+import '../widgets/messages_form.dart';
 
 class ChatScreen extends StatefulWidget {
   final String senderName;
@@ -100,10 +101,10 @@ class _ChatScreenState extends State<ChatScreen> {
                 reverse: true,
                 controller: _scrollController,
                 itemCount: messagesProvider.allMessages.length,
-                itemBuilder: (ctx, index) => ChatItem(
+                itemBuilder: (ctx, index) => MessagesItem(
                   messagesProvider.allMessages[index],
-                  messagesProvider.allMessages[index].senderName ==
-                      widget.senderName,
+                  messagesProvider.allMessages[index]
+                      .isUserMessage(widget.senderName),
                 ),
               ),
             ),
@@ -112,13 +113,23 @@ class _ChatScreenState extends State<ChatScreen> {
             visible: _isTyping,
             child: Padding(
               padding: const EdgeInsets.all(8.0),
-              child: Text(
-                '$_userNameTyping is typing...',
-                style: Theme.of(context).textTheme.title.copyWith(
-                      color: Colors.black54,
-                      fontWeight: FontWeight.w400,
-                      fontSize: 18,
-                    ),
+              child: Row(
+                children: <Widget>[
+                  Text(
+                    '$_userNameTyping is typing',
+                    style: Theme.of(context).textTheme.title.copyWith(
+                          color: Colors.black54,
+                          fontWeight: FontWeight.w400,
+                          fontSize: 14,
+                        ),
+                  ),
+                  Lottie.asset(
+                    'assets/animations/chat-typing-indicator.json',
+                    width: 40,
+                    height: 40,
+                    alignment: Alignment.bottomLeft,
+                  ),
+                ],
               ),
             ),
           ),

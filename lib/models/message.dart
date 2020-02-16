@@ -5,6 +5,8 @@ class Message {
 
   const Message(this.senderName, this.content, this.date);
 
+  bool isUserMessage(String senderName) => this.senderName == senderName;
+
   Map<String, dynamic> toJson() => {
         'senderName': senderName,
         'content': content,

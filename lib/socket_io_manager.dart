@@ -7,30 +7,28 @@ import 'package:flutter_socket_io/socket_io_manager.dart';
 class SocketIoManager {
   SocketIO _socketIO;
 
-  SocketIoManager({@required String serverUrl, String nameSpace = '/'}) {
-    _socketIO = SocketIOManager().createSocketIO(serverUrl, nameSpace);
+  SocketIoManager(
+      {@required String serverUrl,
+      String nameSpace = '/',
+      String query,
+      Function socketStatusCallback}) {
+    _socketIO = SocketIOManager().createSocketIO(serverUrl, nameSpace,
+        query: query, socketStatusCallback: socketStatusCallback);
   }
 
-  void init() {
-    _socketIO.init();
-  }
+  Future<void> init() => _socketIO.init();
 
-  void subscribe(String channel, Function(Map<String, dynamic>) onGetData) {
-    _socketIO.subscribe(channel, (jsonData) {
-      Map<String, dynamic> data = json.decode(jsonData);
-      onGetData(data);
-    });
-  }
+  Future<void> subscribe(
+          String channel, Function(Map<String, dynamic>) onGetData) =>
+      _socketIO.subscribe(channel, (jsonData) {
+        Map<String, dynamic> data = json.decode(jsonData);
+        onGetData(data);
+      });
 
-  void connect() {
-    _socketIO.connect();
-  }
+  Future<void> connect() => _socketIO.connect();
 
-  void sendMessage(String channel, String message) {
-    _socketIO.sendMessage(channel, message);
-  }
+  Future<void> sendMessage(String channel, String message) =>
+      _socketIO.sendMessage(channel, message);
 
-  void disconnect() {
-    _socketIO.disconnect();
-  }
+  Future<void> disconnect() => _socketIO.disconnect();
 }

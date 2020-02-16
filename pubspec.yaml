@@ -27,6 +27,7 @@ dependencies:
   provider: ^4.0.4
   intl: ^0.16.1
   font_awesome_flutter: ^8.5.0
+  lottie: ^0.2.1
 
 dev_dependencies:
   flutter_test:
@@ -45,8 +46,8 @@ flutter:
   uses-material-design: true
 
   # To add assets to your application, add an assets section, like this:
-  #assets:
-  #  - images/a_dot_ham.jpeg
+  assets:
+    - assets/animations/chat-typing-indicator.json
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
