@@ -2,6 +2,8 @@
 
 A Flutter chat app built with Socket IO.
 
+### [Backend code](https://github.com/GeekAbdelouahed/Socket-Io-Chat-app)
+
 ### Screenshots
 | Join | Messages | Typing
 |------|-------|-------|
@@ -15,5 +17,3 @@ A Flutter chat app built with Socket IO.
 |[**Font Awesome Flutter**](https://pub.dev/packages/font_awesome_flutter)
 |[**Intl**](https://pub.dev/packages/intl)
 |[**Lottie**](https://pub.dev/packages/lottie)
-
-### [Backend code](https://github.com/GeekAbdelouahed/Socket-Io-Chat-app)
