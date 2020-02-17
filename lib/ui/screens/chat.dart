@@ -48,34 +48,29 @@ class _ChatScreenState extends State<ChatScreen> {
 
     _scrollController = ScrollController();
 
-    _socketIoManager = SocketIoManager(serverUrl: SERVER_URL);
-
-    _socketIoManager.init();
-
-    _socketIoManager.subscribe('receive_message', (Map<String, dynamic> data) {
-      Provider.of<MessagesProvider>(context, listen: false)
-          .addMessage(Message.fromJson(data));
-      _scrollController.animateTo(
-        0.0,
-        duration: Duration(milliseconds: 200),
-        curve: Curves.bounceInOut,
-      );
-    });
-
-    _socketIoManager.subscribe('typing', (Map<String, dynamic> data) {
-      _userNameTyping = data['senderName'];
-      setState(() {
-        _isTyping = true;
-      });
-    });
-
-    _socketIoManager.subscribe('stop_typing', (Map<String, dynamic> data) {
-      setState(() {
-        _isTyping = false;
-      });
-    });
-
-    _socketIoManager.connect();
+    _socketIoManager = SocketIoManager(serverUrl: SERVER_URL)
+      ..init()
+      ..subscribe('receive_message', (Map<String, dynamic> data) {
+        Provider.of<MessagesProvider>(context, listen: false)
+            .addMessage(Message.fromJson(data));
+        _scrollController.animateTo(
+          0.0,
+          duration: Duration(milliseconds: 200),
+          curve: Curves.bounceInOut,
+        );
+      })
+      ..subscribe('typing', (Map<String, dynamic> data) {
+        _userNameTyping = data['senderName'];
+        setState(() {
+          _isTyping = true;
+        });
+      })
+      ..subscribe('stop_typing', (Map<String, dynamic> data) {
+        setState(() {
+          _isTyping = false;
+        });
+      })
+      ..connect();
   }
 
   @override
