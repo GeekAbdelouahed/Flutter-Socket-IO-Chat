@@ -28,6 +28,16 @@ class _ChatScreenState extends State<ChatScreen> {
   bool _isTyping = false;
   String _userNameTyping;
 
+  void _onTyping() {
+    _socketIoManager.sendMessage(
+        'typing', json.encode({'senderName': widget.senderName}));
+  }
+
+  void _onStopTyping() {
+    _socketIoManager.sendMessage(
+        'stop_typing', json.encode({'senderName': widget.senderName}));
+  }
+
   void _sendMessage(String messageContent) {
     _socketIoManager.sendMessage(
       'send_message',
@@ -130,14 +140,8 @@ class _ChatScreenState extends State<ChatScreen> {
           ),
           MessageForm(
             onSendMessage: _sendMessage,
-            onTyping: () {
-              _socketIoManager.sendMessage(
-                  'typing', json.encode({'senderName': widget.senderName}));
-            },
-            onStopTyping: () {
-              _socketIoManager.sendMessage('stop_typing',
-                  json.encode({'senderName': widget.senderName}));
-            },
+            onTyping: _onTyping,
+            onStopTyping: _onStopTyping,
           ),
         ],
       ),
