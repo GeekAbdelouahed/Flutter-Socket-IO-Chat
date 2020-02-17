@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 class Message {
   final String senderName;
   final String content;
@@ -7,11 +9,11 @@ class Message {
 
   bool isUserMessage(String senderName) => this.senderName == senderName;
 
-  Map<String, dynamic> toJson() => {
+  String toJson() => json.encode({
         'senderName': senderName,
         'content': content,
         'date': date.toString(),
-      };
+      });
 
   static Message fromJson(Map<String, dynamic> data) {
     return Message(

@@ -7,7 +7,7 @@ import 'package:provider/provider.dart';
 import '../../providers/messages_provider.dart';
 import '../../models/message.dart';
 import '../../constants.dart';
-import '../../socket_io_manager.dart';
+import '../../data/socket_io_manager.dart';
 import '../widgets/messages_item.dart';
 import '../widgets/messages_form.dart';
 
@@ -31,11 +31,11 @@ class _ChatScreenState extends State<ChatScreen> {
   void _sendMessage(String messageContent) {
     _socketIoManager.sendMessage(
       'send_message',
-      json.encode(Message(
+      Message(
         widget.senderName,
         messageContent,
         DateTime.now(),
-      ).toJson()),
+      ).toJson(),
     );
 
     Provider.of<MessagesProvider>(context, listen: false)
